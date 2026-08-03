@@ -1,0 +1,21 @@
+{
+  "alpha": 1.0,
+  "reg": 0.1,
+  "n_candidates": 100,
+  "top_k": 10,
+  "max_liked": 100,
+  "default_seed_score": 9.0,
+  "feature_order": [
+    "als",
+    "content",
+    "log_pop",
+    "mean_score",
+    "wilson",
+    "bayes_wr",
+    "is_adult",
+    "year",
+    "type"
+  ],
+  "n_demo_users": 1000,
+  "n_items": 15257
+}
