@@ -1,1 +1,38 @@
-__pycache__
+__pycache__# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Jupyter
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+
+# Build
+build/
+dist/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
