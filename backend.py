@@ -229,6 +229,9 @@ class RecommenderEngine:
         return dcg / idcg
 
     def recommend_existing_user(self, user_idx, hide_adult=True):
+        import time
+        t0 = time.perf_counter()
+
         als_full = self.als_scores_for_user(user_idx)
         seen = self.train_items_by_user.get(user_idx, set())
         candidates = self.top_n_excluding(als_full, seen, self.n_candidates)
@@ -241,9 +244,14 @@ class RecommenderEngine:
 
         rows, top_items = self._finish(candidates, rerank_scores, feat_df, als_full, content_scores, hide_adult)
         ndcg = self.ndcg_personal(user_idx, top_items)
-        return rows, ndcg
+
+        latency_ms = (time.perf_counter() - t0) * 1000
+        return rows, ndcg, latency_ms
 
     def recommend_guest(self, seed_titles_scores, hide_adult=True):
+        import time
+        t0 = time.perf_counter()
+
         seed_items = [item for item, _ in seed_titles_scores]
         seed_scores = [score for _, score in seed_titles_scores]
 
@@ -257,7 +265,9 @@ class RecommenderEngine:
         rerank_scores = self._rerank_scores(feat_df)
 
         rows, _ = self._finish(candidates, rerank_scores, feat_df, als_full, content_scores, hide_adult)
-        return rows
+
+        latency_ms = (time.perf_counter() - t0) * 1000
+        return rows, latency_ms
 
     def search_titles(self, query, limit=20):
         query = query.strip().lower()

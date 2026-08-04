@@ -117,7 +117,7 @@ def render_shap_detail(shap):
     )
 
 
-def render_results(rows, ndcg=None):
+def render_results(rows, ndcg=None, latency_ms=None):
     if not rows:
         st.warning("Tidak ada rekomendasi yang bisa ditampilkan untuk pilihan ini.")
         return
@@ -143,6 +143,13 @@ def render_results(rows, ndcg=None):
                 unsafe_allow_html=True,
             )
         st.write("")
+
+    if latency_ms is not None:
+        st.markdown(
+            f'<div style="font-size:0.78rem;opacity:0.55;margin-bottom:12px">'
+            f'Dihitung secara langsung dalam {latency_ms:.0f} milidetik.</div>',
+            unsafe_allow_html=True,
+        )
 
     left, right = st.columns(2)
     columns = [left, right]
@@ -195,8 +202,8 @@ def tab_existing_user(engine):
 
     if st.button("Tampilkan rekomendasi", key="btn_existing"):
         with st.spinner("Menghitung rekomendasi..."):
-            rows, ndcg = engine.recommend_existing_user(user_idx, hide_adult=hide_adult)
-        render_results(rows, ndcg=ndcg)
+            rows, ndcg, latency = engine.recommend_existing_user(user_idx, hide_adult=hide_adult)
+        render_results(rows, ndcg=ndcg, latency_ms=latency)
 
 
 def tab_guest(engine):
@@ -237,8 +244,8 @@ def tab_guest(engine):
             st.warning("Pilih minimal dua anime terlebih dahulu.")
         else:
             with st.spinner("Menghitung rekomendasi..."):
-                rows = engine.recommend_guest(seeds, hide_adult=hide_adult)
-            render_results(rows, ndcg=None)
+                rows, latency = engine.recommend_guest(seeds, hide_adult=hide_adult)
+            render_results(rows, ndcg=None, latency_ms=latency)
 
 
 def main():
