@@ -110,7 +110,15 @@ def render_history(history):
 
 def render_shap_detail(shap):
     st.caption(f"Nilai dasar model (base value): {shap['base_value']}")
-    st.table(shap["fitur"])
+    tabel = [
+        {
+            "fitur": f["fitur"],
+            "nilai": str(f["nilai"]),
+            "kontribusi": f"{f['kontribusi']:+.6f}",
+        }
+        for f in shap["fitur"]
+    ]
+    st.table(tabel)
     st.caption(
         f"Total dari base value ditambah seluruh kontribusi fitur: {shap['total_rekonstruksi']} "
         f"(harus sama dengan skor akhir di atas, sebagai bukti bahwa kontribusi bersifat aditif)."
